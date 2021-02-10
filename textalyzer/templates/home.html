@@ -1,6 +1,30 @@
 {% extends "layout.html" %} {% block nav_home %}active{% endblock %} {% block content %}
-<h1>Homepage</h1>
-<p>
-    Welcome on my awesome homepage.
-</p>
+<div class="row">
+    <div class="col px-3 py-3 text-center">
+        <h1 class="display-4">Textalyzer</h1>
+        <p class="lead">Welcome to the textalyzer webtool, which allows you to analyze your text with Natural Language
+            Processing tools</p>
+    </div>
+</div>
+
+<div class="row justify-content-md-center">
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Text summarizer</h5>
+                <p class="card-text">Generate a summary of a text using a language-agnostic algorithm</p>
+                <a href="/summarizer" class="btn btn-primary">Try it out!</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
