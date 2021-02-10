@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Textalyzer</title>
+    {% endblock %}
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/" class="{% block nav_home %}{% endblock %}">Home</a></li>
+            <li><a href="/summarizer" class="{% block nav_summ %}{% endblock %}">Summarizer</a></li>
+            <li style="float:right"><a href="/about" class="{% block nav_about %}{% endblock %}">About</a></li>
+        </ul>
+    </nav>
+    <main>
+        {% block content %} {% endblock %}
+    </main>
+    <footer>
+        {% block footer %} &copy; Copyright 2021 by Ruben Peters. {% endblock %}
+    </footer>
+</body>
+
+</html>
