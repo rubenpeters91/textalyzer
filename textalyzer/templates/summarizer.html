@@ -2,7 +2,36 @@
 <div class="row">
     <div class="col px-3 py-3">
         <h1 class="display-4">Text Summarizer</h1>
-        <p class="lead">Blabla</p>
+        <p class="lead">Please fill in your text on the left and press the summarize button. You summarized text will
+            appear on the right</p>
     </div>
+</div>
+
+<div>
+    <form action="/summarizer" method="POST">
+        <div class="row">
+            <div class="form-group col">
+                <label for="originaltext">Text to be summarized</label>
+                <textarea class="form-control" id="originaltext" rows="20"
+                    name="originaltext">{{ original_text }}</textarea>
+            </div>
+            <div class="form-group col">
+                <label for="summarizedtext">Result</label>
+                <textarea class="form-control" id="summarizedtext" rows="20"
+                    name="summarizedtext">{{ summarized_text }}</textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col">
+                <label for="percslider">Required length of result (in %)</label>
+                <input type="range" min="0" max="100" value="{{ slider_value }}" class="slider" id="percslider" ,
+                    name="percslider">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Summarize</button>
+            </div>
+        </div>
+
+    </form>
 </div>
 {% endblock %}
