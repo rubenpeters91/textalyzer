@@ -1,5 +1,7 @@
 # textalyzer
 
+![Screenshot homepage](images/screenshot.png)
+
 Simple website for textual analysis, based on Flask, spaCy and Bootstrap
 
 Currently it only supports text summarization, but more will come :)

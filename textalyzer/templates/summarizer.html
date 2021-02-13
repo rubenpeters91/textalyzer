@@ -1,4 +1,10 @@
-{% extends "layout.html" %} {% block nav_summ %}active{% endblock %} {% block content %}
+{% extends "layout.html" %}
+{% block head %}
+    <script src="{{ url_for('static', filename='summarise.js') }}"></script>
+    {{ super() }}
+{% endblock%}
+{% block nav_summ %}active{% endblock %} 
+{% block content %}
 <div class="row">
     <div class="col px-3 py-3">
         <h1 class="display-4">Text Summarizer</h1>
@@ -8,23 +14,23 @@
 </div>
 
 <div>
-    <form action="/summarizer" method="POST">
+    <form name="summaryform">
         <div class="row">
             <div class="form-group col">
                 <label for="originaltext">Text to be summarized</label>
                 <textarea class="form-control" id="originaltext" rows="20"
-                    name="originaltext">{{ original_text }}</textarea>
+                    name="originaltext"></textarea>
             </div>
             <div class="form-group col">
                 <label for="summarizedtext">Result</label>
-                <textarea class="form-control" id="summarizedtext" rows="20"
-                    name="summarizedtext">{{ summarized_text }}</textarea>
+                <textarea class="form-control-plaintext" id="summarizedtext" rows="20"
+                    name="summarizedtext"></textarea>
             </div>
         </div>
         <div class="row">
             <div class="form-group col">
                 <label for="percslider">Required length of result (in %)</label>
-                <input type="range" min="0" max="100" value="{{ slider_value }}" class="slider" id="percslider" ,
+                <input type="range" min="0" max="100" value="30" class="slider" id="percslider" ,
                     name="percslider">
             </div>
             <div class="col">
