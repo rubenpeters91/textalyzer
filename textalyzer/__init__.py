@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, abort
 from textalyzer.summarizer import TextSummarizer
 app = Flask(__name__)
 
@@ -15,12 +15,16 @@ def summarizer():
 
 @app.route('/make_summary', methods=['POST'])
 def make_summary():
-    original_text = request.form['originaltext']
-    percentage = int(request.form['percslider'])
+    try:
+        form = request.json
+        original_text = form['originaltext']
+        percentage = int(form['percslider'])
 
-    summarize_obj = TextSummarizer()
-    summarize_obj.preprocess_text(original_text)
-    summary = summarize_obj.make_summary(percentage)
+        summarize_obj = TextSummarizer()
+        summarize_obj.preprocess_text(original_text)
+        summary = summarize_obj.make_summary(percentage)
+    except Exception:
+        abort(400)
     return summary
 
 

@@ -12,9 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        xhttp.open("POST", "/make_summary", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send(`originaltext=${summary}&percslider=${percslider}`);
+        form_data = { 'originaltext': summary, 'percslider': percslider }
+        xhttp.open('POST', '/make_summary', true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        xhttp.send(JSON.stringify(form_data));
         event.preventDefault();
     });
 })
