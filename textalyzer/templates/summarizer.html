@@ -29,9 +29,25 @@
         <div class="row mt-2">
             <div class="col">
                 <div class="form-group row">
-                    <label for="sentlength" class="col-sm-8 col-form-label">Required length of result</label>
+                    <label for="setlanguage" class="col-sm-8 col-form-label">Language:</label>
+                    <div class="col-sm-4">
+                        <select class="form-select" name="setlanguage">
+                            <option value="en" selected>English</option>
+                            <option value="nl">Dutch</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label for="sentlength" class="col-sm-8 col-form-label">Required number of sentences in
+                        result:</label>
                     <div class="col-sm-4">
                         <input class="form-control" type="number" min="0" value="5" name="sentlength">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-8 col-form-label" for="inputlength">Sentences in input:</label>
+                    <div class="col-sm-4">
+                        <input class="form-control-plaintext" type="text" value="" name="inputlength" id="inputlength">
                     </div>
                 </div>
 
@@ -39,9 +55,8 @@
             <div class="col">
                 <div class="row">
                     <button type="button" class="btn btn-primary col-sm-4" onclick="make_summary()">Summarize</button>
-                    <label class="col-sm-4 col-form-label" for="inputlength">Sentences in input:</label>
                     <div class="col-sm-4">
-                        <input class="form-control-plaintext" type="text" value="" name="inputlength" id="inputlength">
+                        <div class="spinner-border" role="status" id="summary-spinner" style="display: none;"></div>
                     </div>
 
                 </div>
