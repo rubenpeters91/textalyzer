@@ -1,8 +1,10 @@
+from typing import Tuple
+import numpy as np
 import spacy
 
 
 class TextSummarizer():
-    def __init__(self, language="en"):
+    def __init__(self, language: str = "en"):
         """Text summarizer
         Preprocesses the text and then uses spacy filters to determine
         the most important sentences, based on term frequency in those
@@ -19,7 +21,9 @@ class TextSummarizer():
         else:
             NotImplementedError()
 
-    def _calc_word_dict(self, all_words):
+        self.pos_tags = ['PROPN', 'ADJ', 'NOUN', 'VERB']
+
+    def _calc_word_dict(self, all_words: list[str]):
         """Calculate the term frequencies
 
         Uses a dictionary to store the word frequencies
@@ -29,29 +33,21 @@ class TextSummarizer():
         ----------
         all_words: list of str
             A list of all the words in the document
-
-        Returns
-        -------
-        freq_word: dict
-            A dictionary with for every unique word,
-            its normalized frequency
         """
         freq_word = {}
 
         for word in all_words:
-            word_lower = word.lower()
-            if word_lower in freq_word.keys():
-                freq_word[word_lower] += 1
+            if word in freq_word.keys():
+                freq_word[word] += 1
             else:
-                freq_word[word_lower] = 1
+                freq_word[word] = 1
 
         max_freq = max(freq_word.values())
-        for word in freq_word.keys():
-            freq_word[word] = freq_word[word] / max_freq
+        freq_word = {
+            key: value / max_freq for (key, value) in freq_word.items()}
+        self.freq_word = freq_word
 
-        return freq_word
-
-    def _calc_sent_strength(self, sentences):
+    def _calc_sent_strength(self, sentences: spacy.tokens.Span):
         """Calculate the sentence strength
 
         Using the word frequencies, determine
@@ -61,24 +57,22 @@ class TextSummarizer():
         ----------
         sentences: list of Spacy tokens
             The ouput from doc.sent
-
-        Returns
-        -------
-        sent_strength: dict
-            Dictionary that contains the strength per sentence
         """
-        sent_strength = {}
-        for sent in sentences:
+        sent_content = []
+        sent_strength = []
+        for sent_index, sent in enumerate(sentences):
+            sent_content.append(sent.text)
+            sent_strength.append(0)
             for word in sent:
-                word_index = word.text.lower()
+                word_index = word.lemma_.lower()
                 if word_index in self.freq_word.keys():
-                    if sent in sent_strength.keys():
-                        sent_strength[sent] += self.freq_word[word_index]
-                    else:
-                        sent_strength[sent] = self.freq_word[word_index]
-        return sent_strength
+                    sent_strength[sent_index] += self.freq_word[word_index]
 
-    def preprocess_text(self, text):
+        self.sent_content = np.array(sent_content)
+        self.sent_strength = np.array(sent_strength)
+        self.input_length = len(self.sent_content)
+
+    def preprocess_text(self, text: str):
         """Preprocess input text
 
         Preprocesses the text by filtering with Spacy and
@@ -90,13 +84,12 @@ class TextSummarizer():
             The complete unprocessed input data
         """
         doc = self.nlp(text)
-        pos_tags = ['PROPN', 'ADJ', 'NOUN', 'VERB']
-        all_words = [word.text for word in doc if word.pos_ in pos_tags]
+        all_words = [
+            word.lemma_.lower() for word in doc if word.pos_ in self.pos_tags]
+        self._calc_word_dict(all_words)
+        self._calc_sent_strength(doc.sents)
 
-        self.freq_word = self._calc_word_dict(all_words)
-        self.sent_strength = self._calc_sent_strength(doc.sents)
-
-    def make_summary(self, perc=30):
+    def make_summary(self, sent_length: int = 5) -> Tuple[str, int]:
         """Make summary of the text
 
         Create a summary of the text by taking the
@@ -105,20 +98,24 @@ class TextSummarizer():
 
         Parameters
         ----------
-        perc: int
-            Percentage of output sentences to return
+        sent_length: int
+            Number of output sentences to return
 
         Returns
         -------
-        The summary of the text as string
-
+        summary_string: str
+            The resulting summary string
+        input_length: int
+            The original length of the input
         """
-        top_sentences = sorted(self.sent_strength.values())[::-1]
-        top_index = int(perc/100 * len(top_sentences))
-        top_sent = top_sentences[:top_index]
+        assert (sent_length >= 1) & (sent_length <= self.input_length),\
+            'The output length has to be bigger than 1'\
+            ' and can\'t be bigger than the input length'
 
-        summary = []
-        for sent, strength in self.sent_strength.items():
-            if strength in top_sent:
-                summary.append(sent.text)
-        return " ".join(summary)
+        sorted_indices = np.argsort(-self.sent_strength)
+        top_indices = np.sort(sorted_indices[:sent_length])
+
+        summary = self.sent_content[top_indices]
+        summary_string = ' '.join(summary)
+
+        return summary_string, self.input_length
