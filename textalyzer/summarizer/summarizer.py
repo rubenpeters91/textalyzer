@@ -1,3 +1,4 @@
+from typing import Tuple
 import numpy as np
 import spacy
 
@@ -88,7 +89,7 @@ class TextSummarizer():
         self._calc_word_dict(all_words)
         self._calc_sent_strength(doc.sents)
 
-    def make_summary(self, sent_length: int = 5) -> str:
+    def make_summary(self, sent_length: int = 5) -> Tuple[str, int]:
         """Make summary of the text
 
         Create a summary of the text by taking the
@@ -102,8 +103,10 @@ class TextSummarizer():
 
         Returns
         -------
-        The summary of the text as string
-
+        summary_string: str
+            The resulting summary string
+        input_length: int
+            The original length of the input
         """
         assert (sent_length >= 1) & (sent_length <= self.input_length),\
             'The output length has to be bigger than 1'\
@@ -113,5 +116,6 @@ class TextSummarizer():
         top_indices = np.sort(sorted_indices[:sent_length])
 
         summary = self.sent_content[top_indices]
+        summary_string = ' '.join(summary)
 
-        return " ".join(summary)
+        return summary_string, self.input_length

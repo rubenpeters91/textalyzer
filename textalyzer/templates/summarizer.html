@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 {% block head %}
-    <script src="{{ url_for('static', filename='summarise.js') }}"></script>
-    {{ super() }}
+<script src="{{ url_for('static', filename='summarise.js') }}"></script>
+{{ super() }}
 {% endblock%}
-{% block nav_summ %}active{% endblock %} 
+{% block nav_summ %}active{% endblock %}
 {% block content %}
 <div class="row">
     <div class="col px-3 py-3">
@@ -18,13 +18,12 @@
         <div class="row">
             <div class="form-group col">
                 <label for="originaltext">Text to be summarized</label>
-                <textarea class="form-control" id="originaltext" rows="20"
-                    name="originaltext" placeholder="Copy or type your text here..."></textarea>
+                <textarea class="form-control" id="originaltext" rows="20" name="originaltext"
+                    placeholder="Copy or type your text here..."></textarea>
             </div>
             <div class="form-group col">
                 <label for="summarizedtext">Result</label>
-                <textarea class="form-control-plaintext" id="summarizedtext" rows="20"
-                    name="summarizedtext"></textarea>
+                <textarea class="form-control-plaintext" id="summarizedtext" rows="20" name="summarizedtext"></textarea>
             </div>
         </div>
         <div class="row mt-2">
@@ -35,10 +34,18 @@
                         <input class="form-control" type="number" min="0" value="5" name="sentlength">
                     </div>
                 </div>
-                
+
             </div>
             <div class="col">
-                <button type="submit" class="btn btn-primary">Summarize</button>
+                <div class="row">
+                    <button type="submit" class="btn btn-primary col-sm-4">Summarize</button>
+                    <label class="col-sm-4 col-form-label" for="inputlength">Sentences in input:</label>
+                    <div class="col-sm-4">
+                        <input class="form-control-plaintext" type="text" value="" name="inputlength" id="inputlength">
+                    </div>
+
+                </div>
+
             </div>
         </div>
 

@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (this.readyState == 4 && this.status == 200) {
                 json_response = JSON.parse(this.response)
                 summary_form['summarizedtext'].innerHTML = json_response['summary'];
+                summary_form['inputlength'].value = json_response['input_length'];
             }
         };
 

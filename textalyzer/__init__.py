@@ -22,10 +22,11 @@ def make_summary():
 
         summarize_obj = TextSummarizer()
         summarize_obj.preprocess_text(original_text)
-        summary = summarize_obj.make_summary(sent_length)
+        summary, input_length = \
+            summarize_obj.make_summary(sent_length)
     except Exception as e:
         abort(400, e)
-    return {'summary': summary}
+    return {'summary': summary, 'input_length': input_length}
 
 
 @app.route('/about')
