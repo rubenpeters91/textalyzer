@@ -11,6 +11,7 @@
     <div class="col-sm-4">
         <div class="card">
             <div class="card-body">
+                <img src="{{ url_for('static', filename='img/bookmark.jpg') }}" class="card-img-top" alt="bookmark">
                 <h5 class="card-title">Text summarizer</h5>
                 <p class="card-text">Generate a summary of a text</p>
                 <a href="/summarizer" class="btn btn-primary">Try it out!</a>
@@ -20,8 +21,9 @@
     <div class="col-sm-4">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Other tools</h5>
-                <p class="card-text">Other tools are coming soon</p>
+                <img src="{{ url_for('static', filename='img/cloud.jpg') }}" class="card-img-top" alt="bookmark">
+                <h5 class="card-title">Keyword extractor</h5>
+                <p class="card-text">Extract keywords and generate worclouds</p>
                 <a href="#" class="btn btn-primary">TBA</a>
             </div>
         </div>
