@@ -20,6 +20,8 @@ class TextSummarizer():
         else:
             NotImplementedError()
 
+        self.pos_tags = ['PROPN', 'ADJ', 'NOUN', 'VERB']
+
     def _calc_word_dict(self, all_words: list[str]):
         """Calculate the term frequencies
 
@@ -34,11 +36,10 @@ class TextSummarizer():
         freq_word = {}
 
         for word in all_words:
-            word_lower = word.lower()
-            if word_lower in freq_word.keys():
-                freq_word[word_lower] += 1
+            if word in freq_word.keys():
+                freq_word[word] += 1
             else:
-                freq_word[word_lower] = 1
+                freq_word[word] = 1
 
         max_freq = max(freq_word.values())
         freq_word = {
@@ -62,7 +63,7 @@ class TextSummarizer():
             sent_content.append(sent.text)
             sent_strength.append(0)
             for word in sent:
-                word_index = word.text.lower()
+                word_index = word.lemma_.lower()
                 if word_index in self.freq_word.keys():
                     sent_strength[sent_index] += self.freq_word[word_index]
 
@@ -82,9 +83,8 @@ class TextSummarizer():
             The complete unprocessed input data
         """
         doc = self.nlp(text)
-        pos_tags = ['PROPN', 'ADJ', 'NOUN', 'VERB']
-        all_words = [word.text for word in doc if word.pos_ in pos_tags]
-
+        all_words = [
+            word.lemma_.lower() for word in doc if word.pos_ in self.pos_tags]
         self._calc_word_dict(all_words)
         self._calc_sent_strength(doc.sents)
 
