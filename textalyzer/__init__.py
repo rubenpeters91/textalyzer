@@ -19,8 +19,9 @@ def make_summary():
         form = request.json
         original_text = form['originaltext']
         sent_length = int(form['sentlength'])
+        text_language = form['language']
 
-        summarize_obj = TextSummarizer()
+        summarize_obj = TextSummarizer(text_language)
         summarize_obj.preprocess_text(original_text)
         summary, input_length = \
             summarize_obj.make_summary(sent_length)

@@ -13,11 +13,13 @@ class TextSummarizer():
         Parameters
         ----------
         language: str (default: "en")
-            Which languagemodel to use, only English supported at the
-            moment
+            Which languagemodel to use, only English ("en")
+            and Dutch ("nl") are supported at the moment
         """
-        if language == "en":
-            self.nlp = spacy.load("en_core_web_sm")
+        if language == 'en':
+            self.nlp = spacy.load('en_core_web_sm')
+        elif language == 'nl':
+            self.nlp = spacy.load('nl_core_news_sm')
         else:
             NotImplementedError()
 
