@@ -3,7 +3,7 @@ import spacy
 
 
 class TextSummarizer():
-    def __init__(self, language="en"):
+    def __init__(self, language: str = "en"):
         """Text summarizer
         Preprocesses the text and then uses spacy filters to determine
         the most important sentences, based on term frequency in those
@@ -20,7 +20,7 @@ class TextSummarizer():
         else:
             NotImplementedError()
 
-    def _calc_word_dict(self, all_words):
+    def _calc_word_dict(self, all_words: list[str]):
         """Calculate the term frequencies
 
         Uses a dictionary to store the word frequencies
@@ -30,12 +30,6 @@ class TextSummarizer():
         ----------
         all_words: list of str
             A list of all the words in the document
-
-        Returns
-        -------
-        freq_word: dict
-            A dictionary with for every unique word,
-            its normalized frequency
         """
         freq_word = {}
 
@@ -47,12 +41,11 @@ class TextSummarizer():
                 freq_word[word_lower] = 1
 
         max_freq = max(freq_word.values())
-        for word in freq_word.keys():
-            freq_word[word] = freq_word[word] / max_freq
+        freq_word = {
+            key: value / max_freq for (key, value) in freq_word.items()}
+        self.freq_word = freq_word
 
-        return freq_word
-
-    def _calc_sent_strength(self, sentences):
+    def _calc_sent_strength(self, sentences: spacy.tokens.Span):
         """Calculate the sentence strength
 
         Using the word frequencies, determine
@@ -62,25 +55,22 @@ class TextSummarizer():
         ----------
         sentences: list of Spacy tokens
             The ouput from doc.sent
-
-        Returns
-        -------
-        sent_strength: dict
-            Dictionary that contains the strength per sentence
         """
-        sent_strength = {}
-        for sent in sentences:
+        sent_content = []
+        sent_strength = []
+        for sent_index, sent in enumerate(sentences):
+            sent_content.append(sent.text)
+            sent_strength.append(0)
             for word in sent:
                 word_index = word.text.lower()
                 if word_index in self.freq_word.keys():
-                    sent_label = sent.text
-                    if sent_label in sent_strength.keys():
-                        sent_strength[sent_label] += self.freq_word[word_index]
-                    else:
-                        sent_strength[sent_label] = self.freq_word[word_index]
-        return sent_strength
+                    sent_strength[sent_index] += self.freq_word[word_index]
 
-    def preprocess_text(self, text):
+        self.sent_content = np.array(sent_content)
+        self.sent_strength = np.array(sent_strength)
+        self.input_length = len(self.sent_content)
+
+    def preprocess_text(self, text: str):
         """Preprocess input text
 
         Preprocesses the text by filtering with Spacy and
@@ -94,12 +84,11 @@ class TextSummarizer():
         doc = self.nlp(text)
         pos_tags = ['PROPN', 'ADJ', 'NOUN', 'VERB']
         all_words = [word.text for word in doc if word.pos_ in pos_tags]
-        self.input_length = len(list(doc.sents))
 
-        self.freq_word = self._calc_word_dict(all_words)
-        self.sent_strength = self._calc_sent_strength(doc.sents)
+        self._calc_word_dict(all_words)
+        self._calc_sent_strength(doc.sents)
 
-    def make_summary(self, sent_length=5):
+    def make_summary(self, sent_length: int = 5) -> str:
         """Make summary of the text
 
         Create a summary of the text by taking the
@@ -120,11 +109,9 @@ class TextSummarizer():
             'The output length has to be bigger than 1'\
             ' and can\'t be bigger than the input length'
 
-        sorted_indices = np.argsort(-np.array(
-            list(self.sent_strength.values())))
+        sorted_indices = np.argsort(-self.sent_strength)
         top_indices = np.sort(sorted_indices[:sent_length])
 
-        sentences = np.array(list(self.sent_strength.keys()))
-        summary = sentences[top_indices]
+        summary = self.sent_content[top_indices]
 
         return " ".join(summary)
