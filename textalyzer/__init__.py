@@ -18,14 +18,14 @@ def make_summary():
     try:
         form = request.json
         original_text = form['originaltext']
-        percentage = int(form['percslider'])
+        sent_length = int(form['sentlength'])
 
         summarize_obj = TextSummarizer()
         summarize_obj.preprocess_text(original_text)
-        summary = summarize_obj.make_summary(percentage)
-    except Exception:
-        abort(400)
-    return summary
+        summary = summarize_obj.make_summary(sent_length)
+    except Exception as e:
+        abort(400, e)
+    return {'summary': summary}
 
 
 @app.route('/about')

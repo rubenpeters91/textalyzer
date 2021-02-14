@@ -3,16 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     summary_form.addEventListener('submit', (event) => {
         let summary = summary_form['originaltext'].value;
-        let percslider = summary_form['percslider'].value
+        let sent_length = summary_form['sentlength'].value
 
         let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                summary_form['summarizedtext'].innerHTML = this.responseText;
+                json_response = JSON.parse(this.response)
+                summary_form['summarizedtext'].innerHTML = json_response['summary'];
             }
         };
 
-        form_data = { 'originaltext': summary, 'percslider': percslider }
+        form_data = { 'originaltext': summary, 'sentlength': sent_length }
         xhttp.open('POST', '/make_summary', true);
         xhttp.setRequestHeader('Content-type', 'application/json');
         xhttp.send(JSON.stringify(form_data));
