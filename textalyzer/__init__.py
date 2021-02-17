@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, abort
 from textalyzer.texttools import TextSummarizer, WordFreq
-import base64
+from base64 import b64encode
 from io import BytesIO
+from PIL import Image
 
 app = Flask(__name__)
 
@@ -44,21 +45,28 @@ def make_wordfreq():
         form = request.json
         original_text = form['originaltext']
         max_words = int(form['maxterms'])
+        wordcloud = form['wordcloud']
         text_language = form['language']
 
         wordfreq_obj = WordFreq(text_language)
         wordfreq_obj.preprocess_text(original_text)
-        wordfreq_plot = \
-            wordfreq_obj.plot_wordfreq(max_words)
 
         buf = BytesIO()
-        wordfreq_plot.savefig(buf, format="png")
+        if wordcloud == 'wordcloud':
+            wordfreq_plot = \
+                wordfreq_obj.plot_wordcloud(max_words)
+            pil_img = Image.fromarray(wordfreq_plot)
+            pil_img.save(buf, format='png')
+        else:
+            wordfreq_plot = \
+                wordfreq_obj.plot_wordfreq(max_words)
+            wordfreq_plot.savefig(buf, format='png')
 
-        embedded_plot = base64.b64encode(buf.getbuffer()).decode("ascii")
+        embedded_plot = b64encode(buf.getbuffer()).decode("ascii")
     except Exception as e:
         abort(400, e)
 
-    return f"<img src='data:image/png;base64,{embedded_plot}'/>"
+    return {'image': embedded_plot}
 
 
 @app.route('/about')
