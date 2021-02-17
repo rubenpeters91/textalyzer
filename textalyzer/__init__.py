@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request, abort
-from textalyzer.summarizer import TextSummarizer
+from textalyzer.texttools import TextSummarizer, WordFreq
+import base64
+from io import BytesIO
+
 app = Flask(__name__)
 
 
@@ -28,6 +31,34 @@ def make_summary():
     except Exception as e:
         abort(400, e)
     return {'summary': summary, 'input_length': input_length}
+
+
+@app.route('/wordfreqs')
+def wordfreqs():
+    return render_template('wordfreq.html')
+
+
+@app.route('/make_wordfreq', methods=['POST'])
+def make_wordfreq():
+    try:
+        form = request.json
+        original_text = form['originaltext']
+        max_words = int(form['maxterms'])
+        text_language = form['language']
+
+        wordfreq_obj = WordFreq(text_language)
+        wordfreq_obj.preprocess_text(original_text)
+        wordfreq_plot = \
+            wordfreq_obj.plot_wordfreq(max_words)
+
+        buf = BytesIO()
+        wordfreq_plot.savefig(buf, format="png")
+
+        embedded_plot = base64.b64encode(buf.getbuffer()).decode("ascii")
+    except Exception as e:
+        abort(400, e)
+
+    return f"<img src='data:image/png;base64,{embedded_plot}'/>"
 
 
 @app.route('/about')

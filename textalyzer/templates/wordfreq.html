@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block head %}
+<script src="{{ url_for('static', filename='js/wordfreq.js') }}"></script>
+{{ super() }}
+{% endblock%}
+{% block nav_freq %}active{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col px-3 py-3">
+        <h1 class="display-4">Keyword frequency</h1>
+        <p class="lead">Please fill in your text on the left and press the plot button. Your keyword plot will appear on the right</p>
+    </div>
+</div>
+
+<div>
+    <form name="keywordform">
+        <div class="row">
+            <div class="form-group col">
+                <label for="originaltext">Text to be summarized</label>
+                <textarea class="form-control" id="originaltext" rows="20" name="originaltext"
+                    placeholder="Copy or type your text here..."></textarea>
+            </div>
+            <div class="col" id="plotcontainer">
+                <!-- Placeholder for the image-->
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col">
+                <div class="form-group row">
+                    <label for="setlanguage" class="col-sm-8 col-form-label">Language:</label>
+                    <div class="col-sm-4">
+                        <select class="form-select" name="setlanguage">
+                            <option value="en" selected>English</option>
+                            <option value="nl">Dutch</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label for="maxterms" class="col-sm-8 col-form-label">Max number of keywords in plot:</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="number" min="0" value="20" name="maxterms">
+                    </div>
+                </div>
+
+            </div>
+            <div class="col">
+                <div class="row">
+                    <button type="button" class="btn btn-primary col-sm-4" onclick="make_wordfreq()">Plot</button>
+                    <div class="col-sm-4">
+                        <div class="spinner-border" role="status" id="wordfreq-spinner" style="display: none;"></div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+</div>
+{% endblock %}
