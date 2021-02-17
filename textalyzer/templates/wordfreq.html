@@ -21,6 +21,15 @@ appear on the right.{% endblock %}
         <input class="form-control" type="number" min="0" value="20" name="maxterms">
     </div>
 </div>
+<div class="form-group row mt-2">
+    <label for="wordcloud" class="col-sm-8 col-form-label">Type of plot:</label>
+    <div class="col-sm-4">
+        <select class="form-select" name="wordcloud">
+            <option value="plot" selected>Term frequency plot</option>
+            <option value="wordcloud">Wordcloud</option>
+        </select>
+    </div>
+</div>
 {% endblock %}
 {% block texttoolbutton %}
 <button type="button" class="btn btn-primary col-sm-4" onclick="make_wordfreq()">Plot</button>
