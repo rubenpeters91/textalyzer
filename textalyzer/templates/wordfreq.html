@@ -1,0 +1,30 @@
+{% extends "texttools.html" %}
+{% block head %}
+<script src="{{ url_for('static', filename='js/wordfreq.js') }}"></script>
+{{ super() }}
+{% endblock%}
+{% block nav_freq %}active{% endblock %}
+
+{% block texttooltitle %}Keyword frequency{% endblock %}
+{% block texttoolsubtitle %}Please fill in your text on the left and press the plot button. Your keyword plot will
+appear on the right.{% endblock %}
+{% block texttoolformname %}keywordform{% endblock %}
+{% block texttoolresult %}
+<div class="col" id="plotcontainer">
+    <!-- Placeholder for the image-->
+</div>
+{% endblock %}
+{% block texttoolinput %}
+<div class="form-group row mt-2">
+    <label for="maxterms" class="col-sm-8 col-form-label">Max number of keywords in plot:</label>
+    <div class="col-sm-4">
+        <input class="form-control" type="number" min="0" value="20" name="maxterms">
+    </div>
+</div>
+{% endblock %}
+{% block texttoolbutton %}
+<button type="button" class="btn btn-primary col-sm-4" onclick="make_wordfreq()">Plot</button>
+<div class="col-sm-4">
+    <div class="spinner-border" role="status" id="wordfreq-spinner" style="display: none;"></div>
+</div>
+{% endblock %}

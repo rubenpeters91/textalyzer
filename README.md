@@ -4,7 +4,7 @@
 
 Simple website for textual analysis, based on Flask, spaCy and Bootstrap.
 
-Currently it only supports text summarization, but more will come :)
+Currently it has support for keyword extraction and summarization.
 
 ## Installation
 
