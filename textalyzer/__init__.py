@@ -3,6 +3,7 @@ from textalyzer.texttools import TextSummarizer, WordFreq
 from base64 import b64encode
 from io import BytesIO
 from PIL import Image
+import wikipedia
 
 app = Flask(__name__)
 
@@ -67,6 +68,17 @@ def make_wordfreq():
         abort(400, e)
 
     return {'image': embedded_plot}
+
+
+@app.route('/random_wiki')
+def random_wiki():
+    try:
+        random_title = wikipedia.random(pages=1)
+        random_page = wikipedia.page(random_title)
+    except Exception as e:
+        abort(400, e)
+
+    return {'wiki_page': random_page.content}
 
 
 @app.route('/about')
