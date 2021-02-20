@@ -1,3 +1,5 @@
+"use strict";
+
 async function make_summary() {
     document.getElementById('summary-spinner').style.display = '';
     let summary_form = document.forms['summaryform'];

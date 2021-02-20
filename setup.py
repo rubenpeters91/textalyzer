@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='textalyzer',
-    version='0.3.0',
+    version='0.4.0',
     author='Ruben Peters',
     url='https://github.com/rubenpeters91/textalyzer',
     packages=find_packages(),
@@ -11,7 +11,8 @@ setup(
         'flask',
         'spacy',
         'numpy',
-        'matplotlib'
+        'matplotlib',
+        'wikipedia'
     ],
     entry_points={
         'console_scripts': ['run_textalyzer=textalyzer.__init__:main']

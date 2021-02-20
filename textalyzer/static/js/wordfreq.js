@@ -1,3 +1,5 @@
+"use strict";
+
 async function make_wordfreq() {
     document.getElementById('wordfreq-spinner').style.display = '';
     let wordfreq_form = document.forms['keywordform'];

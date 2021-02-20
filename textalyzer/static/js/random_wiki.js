@@ -1,3 +1,5 @@
+"use strict";
+
 async function random_wiki() {
     document.getElementById('wikispinner').style.display = '';
     const form = document.forms[0]
