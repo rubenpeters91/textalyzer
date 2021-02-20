@@ -1,11 +1,17 @@
 {% extends "layout.html" %}
+{% block head %}
+<script src="{{ url_for('static', filename='js/random_wiki.js') }}"></script>
+{{ super() }}
+{% endblock%}
 {% block content %}
 <div class="row">
     <div class="col px-3 py-3">
         <h1 class="display-4">{% block texttooltitle %}Text Summarizer{% endblock %}</h1>
         <p class="lead">{% block texttoolsubtitle %}Please fill in your text on the left and press the summarize button.
             Your summarized text will
-            appear on the right.{% endblock %}</p>
+            appear on the right.{% endblock %} Or use a random <a href="javascript:random_wiki()">Wikipedia article</a>
+            <span class="spinner-border spinner-border-sm" id="wikispinner" role="status" style="display: none;"></span>
+        </p>
     </div>
 </div>
 
