@@ -1,4 +1,5 @@
 import spacy
+from typing import List
 
 
 class TextTool():
@@ -21,7 +22,7 @@ class TextTool():
 
         self.pos_tags = ['PROPN', 'ADJ', 'NOUN', 'VERB']
 
-    def _calc_word_dict(self, all_words: list[str]):
+    def _calc_word_dict(self, all_words: List[str]):
         """Calculate the term frequencies
 
         Uses a dictionary to store the word frequencies
