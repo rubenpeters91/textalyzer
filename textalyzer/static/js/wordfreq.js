@@ -23,9 +23,15 @@ async function make_wordfreq() {
     document.getElementById('wordfreq-spinner').style.display = 'none';
     if (response.ok) {
         let json_response = await response.json();
-        let img_tag = `<img src="data:image/png;base64,${json_response['image']}"` +
-            ' alt="word frequency plot" class="img-fluid"/>';
-        document.getElementById('plotcontainer').innerHTML = img_tag;
+        if ('image' in json_response) {
+            let img_tag = `<img src="data:image/png;base64,${json_response['image']}"` +
+                ' alt="word frequency plot" class="img-fluid"/>';
+            document.getElementById('plotcontainer').innerHTML = img_tag;
+        } else {
+            // First remove all contents, else it will draw the plot multiple times
+            document.getElementById('plotcontainer').innerHTML = "";
+            d3_bar(json_response['words'])
+        }
     } else {
         document.getElementById('plotcontainer').innerHTML = '<p>Something went wrong...</p>'
     }
