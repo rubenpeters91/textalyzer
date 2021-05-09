@@ -18,7 +18,7 @@ class TextTool():
         elif language == 'nl':
             self.nlp = spacy.load('nl_core_news_sm')
         else:
-            NotImplementedError()
+            raise NotImplementedError()
 
         self.pos_tags = ['PROPN', 'ADJ', 'NOUN', 'VERB']
 

@@ -1,7 +1,7 @@
 from textalyzer.texttools import TextTool
-from matplotlib.figure import Figure
 from wordcloud import WordCloud
 import numpy as np
+from typing import List
 
 
 class WordFreq(TextTool):
@@ -18,7 +18,7 @@ class WordFreq(TextTool):
         """
         super().__init__(language)
 
-    def plot_wordfreq(self, max_terms: int = 10) -> Figure:
+    def plot_wordfreq(self, max_terms: int = 10) -> List:
         """Plot keyword frequency
 
         Parameters
@@ -28,7 +28,7 @@ class WordFreq(TextTool):
 
         Returns
         -------
-        A Matplotlib Figure with the max frequency terms
+        A list of dictionaries with the wordfreq (visualisation is done through d3)
         """
         word_array = np.array(list(self.freq_word.keys()))
         value_array = np.array(list(self.freq_word.values()))
@@ -36,27 +36,8 @@ class WordFreq(TextTool):
         top_indices = np.argsort(-value_array)[:max_terms]
         top_words = word_array[top_indices]
         top_values = value_array[top_indices]
-        y_pos = np.arange(len(top_words))
 
-        fig = Figure()
-        ax = fig.subplots()
-        ax.barh(y_pos, top_values, align='center')
-        ax.set_yticks(y_pos)
-        ax.set_yticklabels(top_words)
-        ax.invert_yaxis()  # labels read top-to-bottom
-        ax.set_xlabel('Frequency')
-        ax.set_title(f'Top {max_terms} keywords in text')
-
-        # removing the spines
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        ax.spines['bottom'].set_visible(False)
-        ax.spines['left'].set_visible(False)
-
-        # removing the tick marks
-        ax.tick_params(bottom="off", left="off")
-        fig.tight_layout()
-        return fig
+        return [{'term': word, 'freq': freq} for word, freq in zip(top_words, top_values)]
 
     def plot_wordcloud(self, max_terms: int = 10) -> str:
         """Plot wordcloud
@@ -68,7 +49,7 @@ class WordFreq(TextTool):
 
         Returns
         -------
-        A Matplotlib Figure with the max frequency terms
+        A wordcloud with the max frequency terms
         """
         wc = WordCloud(background_color='white', max_words=max_terms,
                        width=800, height=600)

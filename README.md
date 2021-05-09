@@ -6,6 +6,9 @@ Simple website for textual analysis, based on Flask, spaCy and Bootstrap.
 
 Currently it has support for keyword extraction and summarization.
 
+To run the app you can either install it yourself using the steps below, or pull the latest
+image from DockerHub using: `docker pull rubenpeters91/textalyzer`
+
 ## Installation
 
 ### Production

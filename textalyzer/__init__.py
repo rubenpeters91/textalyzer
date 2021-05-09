@@ -52,22 +52,21 @@ def make_wordfreq():
         wordfreq_obj = WordFreq(text_language)
         wordfreq_obj.preprocess_text(original_text)
 
-        buf = BytesIO()
         if wordcloud == 'wordcloud':
+            buf = BytesIO()
             wordfreq_plot = \
                 wordfreq_obj.plot_wordcloud(max_words)
             pil_img = Image.fromarray(wordfreq_plot)
             pil_img.save(buf, format='png')
+            embedded_plot = b64encode(buf.getbuffer()).decode("ascii")
+            return {'image': embedded_plot}
         else:
-            wordfreq_plot = \
+            wordfreq_dict = \
                 wordfreq_obj.plot_wordfreq(max_words)
-            wordfreq_plot.savefig(buf, format='png')
+            return {'words': wordfreq_dict}
 
-        embedded_plot = b64encode(buf.getbuffer()).decode("ascii")
     except Exception as e:
         abort(400, e)
-
-    return {'image': embedded_plot}
 
 
 @app.route('/random_wiki')
