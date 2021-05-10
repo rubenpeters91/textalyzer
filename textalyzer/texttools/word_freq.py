@@ -1,6 +1,5 @@
 from textalyzer.texttools import TextTool
 from wordcloud import WordCloud
-import numpy as np
 from typing import List
 
 
@@ -30,14 +29,9 @@ class WordFreq(TextTool):
         -------
         A list of dictionaries with the wordfreq (visualisation is done through d3)
         """
-        word_array = np.array(list(self.freq_word.keys()))
-        value_array = np.array(list(self.freq_word.values()))
+        top_words = self.freq_word.most_common(max_terms)
 
-        top_indices = np.argsort(-value_array)[:max_terms]
-        top_words = word_array[top_indices]
-        top_values = value_array[top_indices]
-
-        return [{'term': word, 'freq': freq} for word, freq in zip(top_words, top_values)]
+        return [{'term': word, 'freq': freq} for word, freq in top_words]
 
     def plot_wordcloud(self, max_terms: int = 10) -> str:
         """Plot wordcloud

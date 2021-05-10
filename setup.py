@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='textalyzer',
-    version='0.6.0',
+    version='0.6.1',
     author='Ruben Peters',
     url='https://github.com/rubenpeters91/textalyzer',
     packages=find_packages(),

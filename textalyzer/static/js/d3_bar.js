@@ -38,6 +38,7 @@ function d3_bar(data) {
 
     // Axis
     let xAxis = d3.axisTop(x)
+        .tickFormat(d3.format("d"))
     let yAxis = d3.axisLeft(y)
         .tickFormat(i => data[i].term)
         .tickSizeOuter(0);
@@ -76,7 +77,7 @@ function d3_bar(data) {
         let mouseLoc = d3.pointer(event, this)
 
         tooltip
-            .text(d.term + ": " + d.freq.toFixed(2))
+            .text(d.term + ": " + Math.round(d.freq))
             .attr("transform",
                 "translate(" + mouseLoc[0] + "," +
                 (mouseLoc[1]) + ")");
