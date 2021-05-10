@@ -19,8 +19,6 @@ class TextSummarizer(TextTool):
         """
         super().__init__(language)
 
-        self.pos_tags = ['PROPN', 'ADJ', 'NOUN', 'VERB']
-
     def _calc_sent_strength(self, sentences: spacy.tokens.Span):
         """Calculate the sentence strength
 
@@ -57,7 +55,7 @@ class TextSummarizer(TextTool):
         text: str
             The complete unprocessed input data
         """
-        super().preprocess_text(text)
+        super().preprocess_text(text, lower_terms=True)
         self._calc_sent_strength(self.doc.sents)
 
     def make_summary(self, sent_length: int = 5) -> Tuple[str, int]:
