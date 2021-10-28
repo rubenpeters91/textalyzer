@@ -77,14 +77,15 @@ class TextSummarizer(TextTool):
         input_length: int
             The original length of the input
         """
-        assert (sent_length >= 1) & (sent_length <= self.input_length),\
-            'The output length has to be bigger than 1'\
-            ' and can\'t be bigger than the input length'
+        assert sent_length >= 1 and sent_length <= self.input_length, (
+            "The output length has to be bigger than 1"
+            " and can't be bigger than the input length"
+        )
 
         sorted_indices = np.argsort(-self.sent_strength)
         top_indices = np.sort(sorted_indices[:sent_length])
 
         summary = self.sent_content[top_indices]
-        summary_string = ' '.join(summary)
+        summary_string = " ".join(summary)
 
         return summary_string, self.input_length
