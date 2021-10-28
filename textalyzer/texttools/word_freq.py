@@ -4,7 +4,7 @@ from typing import List
 
 
 class WordFreq(TextTool):
-    def __init__(self, language: str = 'en'):
+    def __init__(self, language: str = "en"):
         """Word frequency
         Preprocesses the text and then uses spacy filters to determine
         the term frequency and plot the result.
@@ -27,11 +27,12 @@ class WordFreq(TextTool):
 
         Returns
         -------
-        A list of dictionaries with the wordfreq (visualisation is done through d3)
+        A list of dictionaries with the wordfreq
+        (visualisation is done through d3)
         """
         top_words = self.freq_word.most_common(max_terms)
 
-        return [{'term': word, 'freq': freq} for word, freq in top_words]
+        return [{"term": word, "freq": freq} for word, freq in top_words]
 
     def plot_wordcloud(self, max_terms: int = 10) -> str:
         """Plot wordcloud
@@ -45,8 +46,9 @@ class WordFreq(TextTool):
         -------
         A wordcloud with the max frequency terms
         """
-        wc = WordCloud(background_color='white', max_words=max_terms,
-                       width=800, height=600)
+        wc = WordCloud(
+            background_color="white", max_words=max_terms, width=800, height=600
+        )
 
         # generate word cloud
         wc.generate_from_frequencies(self.freq_word)
