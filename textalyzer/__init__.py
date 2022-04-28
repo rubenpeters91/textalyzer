@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, abort
-from textalyzer.texttools import TextSummarizer, WordFreq
 from base64 import b64encode
 from io import BytesIO
-from PIL import Image
+
 import wikipedia
+from flask import Flask, abort, render_template, request
+from PIL import Image
+
+from textalyzer.texttools import TextSummarizer, WordFreq
 
 app = Flask(__name__)
 

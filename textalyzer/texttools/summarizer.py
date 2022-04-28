@@ -1,11 +1,12 @@
-from textalyzer.texttools import TextTool
-from typing import Tuple
+from typing import Iterator, Tuple
+
 import numpy as np
-import spacy
+from spacy.tokens import Span
+from textalyzer.texttools import TextTool
 
 
 class TextSummarizer(TextTool):
-    def __init__(self, language: str = "en"):
+    def __init__(self, language: str = "en") -> None:
         """Text summarizer
         Preprocesses the text and then uses spacy filters to determine
         the most important sentences, based on term frequency in those
@@ -19,7 +20,7 @@ class TextSummarizer(TextTool):
         """
         super().__init__(language)
 
-    def _calc_sent_strength(self, sentences: spacy.tokens.Span):
+    def _calc_sent_strength(self, sentences: Iterator[Span]) -> None:
         """Calculate the sentence strength
 
         Using the word frequencies, determine
@@ -44,7 +45,7 @@ class TextSummarizer(TextTool):
         self.sent_strength = np.array(sent_strength)
         self.input_length = len(self.sent_content)
 
-    def preprocess_text(self, text: str):
+    def preprocess_text(self, text: str, lower_terms: bool = True) -> None:
         """Preprocess input text
 
         Preprocesses the text by filtering with Spacy and
@@ -55,7 +56,7 @@ class TextSummarizer(TextTool):
         text: str
             The complete unprocessed input data
         """
-        super().preprocess_text(text, lower_terms=True)
+        super().preprocess_text(text, lower_terms=lower_terms)
         self._calc_sent_strength(self.doc.sents)
 
     def make_summary(self, sent_length: int = 5) -> Tuple[str, int]:
@@ -77,10 +78,11 @@ class TextSummarizer(TextTool):
         input_length: int
             The original length of the input
         """
-        assert sent_length >= 1 and sent_length <= self.input_length, (
-            "The output length has to be bigger than 1"
-            " and can't be bigger than the input length"
-        )
+        if sent_length <= 1 or sent_length >= self.input_length:
+            raise ValueError(
+                "The output length has to be bigger than 1"
+                " and can't be bigger than the input length"
+            )
 
         sorted_indices = np.argsort(-self.sent_strength)
         top_indices = np.sort(sorted_indices[:sent_length])
