@@ -1,10 +1,9 @@
 from textalyzer.texttools import TextTool
 from wordcloud import WordCloud
-from typing import List
 
 
 class WordFreq(TextTool):
-    def __init__(self, language: str = "en"):
+    def __init__(self, language: str = "en") -> None:
         """Word frequency
         Preprocesses the text and then uses spacy filters to determine
         the term frequency and plot the result.
@@ -17,7 +16,7 @@ class WordFreq(TextTool):
         """
         super().__init__(language)
 
-    def plot_wordfreq(self, max_terms: int = 10) -> List:
+    def plot_wordfreq(self, max_terms: int = 10) -> list[dict]:
         """Plot keyword frequency
 
         Parameters

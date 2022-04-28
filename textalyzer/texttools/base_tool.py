@@ -1,5 +1,6 @@
-import spacy
 from collections import Counter
+
+import spacy
 
 
 class TextTool:
